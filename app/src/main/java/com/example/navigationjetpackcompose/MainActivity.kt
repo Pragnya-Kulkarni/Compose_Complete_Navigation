@@ -50,7 +50,7 @@ fun MainContent() {
             //6. define home as first destination as it is initial screen
             //7. pass navController to the constructor of each composable which is needed for navigation
             composable("home") {
-                HomeScreen(navController)
+                HomeScreen(navController, "0")
             }
             composable("first_post?postItem={postItem}", arguments = listOf(navArgument("postItem"){
                 type= NavType.StringType

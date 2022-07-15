@@ -17,6 +17,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.example.navigationjetpackcompose.composables.*
 
 class BottomNavigationActivity : ComponentActivity() {
@@ -52,9 +53,19 @@ private fun BottomNavGraph(navController: NavHostController) {
 
         //6. define home as first destination as it is initial screen
         //7. pass navController to the constructor of each composable which is needed for navigation
-        composable(BottomBarScreen.Home.route) {
-            HomeScreen(navController)
+        val uri = "https://www.example.com"
+        composable(
+            "home?id={id}",
+            deepLinks = listOf(navDeepLink { uriPattern = "$uri/{id}" }),
+            arguments = listOf(navArgument("id") {
+                type = NavType.StringType
+                defaultValue = "0"
+            })
+        ) {
+                backStackEntry ->
+            HomeScreen(navController, backStackEntry.arguments?.getString("id"))
         }
+
         composable(BottomBarScreen.Search.route, arguments = listOf(navArgument("code"){
             type= NavType.StringType
             defaultValue= ""
@@ -68,9 +79,24 @@ private fun BottomNavGraph(navController: NavHostController) {
         composable(BottomBarScreen.Profile.route) {
             ProfileScreen(navController)
         }
+
+
+
+        // Use of Deep Link in compose
+       /* val uri = "https://www.example.com"
+        composable(
+            "profile?id={id}",
+            deepLinks = listOf(navDeepLink { uriPattern = "$uri/{id}" })
+        ) { backStackEntry ->
+            Profile(navController, backStackEntry.arguments?.getString("id"))
+        }*/
+
+
         composable(BottomBarScreen.Notification.route) {
-            NotificationScreen(navController)
+            NotificationScreen(navController, "0")
         }
+
+
         composable("first_post?postItem={postItem}", arguments = listOf(navArgument("postItem"){
             type= NavType.StringType
             defaultValue= "Hello"
@@ -110,8 +136,13 @@ fun BottomBar(navController: NavHostController) {
                 selected = currentDestination?.hierarchy?.any { navDestination -> navDestination.route == screen.route } == true,
                 onClick = {
                     navController.navigate(screen.route) {
+                        // Pop up to the start destination of the graph to
+                        // avoid building up a large stack of destinations
+                        // on the back stack as users select items
                         popUpTo(navController.graph.findStartDestination().id)
-                        launchSingleTop = true
+                        // Avoid multiple copies of the same destination when
+                        // reselecting the same item
+                         launchSingleTop = true
                     }
                 })
         }

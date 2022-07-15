@@ -15,7 +15,7 @@ import com.example.navigationjetpackcompose.Person
 
 @ExperimentalMaterialApi
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, id: String?) {
     Scaffold(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -61,6 +61,18 @@ fun HomeScreen(navController: NavHostController) {
                     modifier = Modifier.padding(horizontal = 30.dp, vertical = 30.dp)
                 )
             }
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+            id?.let {
+                Text(
+                    text = "Id Sent is $id",
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 30.dp, vertical = 30.dp)
+                )
+            }
+
         }
     }
 

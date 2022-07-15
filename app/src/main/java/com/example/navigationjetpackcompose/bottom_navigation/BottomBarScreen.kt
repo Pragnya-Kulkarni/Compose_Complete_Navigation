@@ -10,7 +10,7 @@ sealed class BottomBarScreen(
     val icon: ImageVector,
 ) {
     object Home : BottomBarScreen(
-        "home",
+        "home?id={id}",
         "Home",
         icon = Icons.Default.Home
     )

@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
 @Composable
-fun NotificationScreen(navController: NavHostController) {
+fun NotificationScreen(navController: NavHostController, id: String?) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -32,6 +32,7 @@ fun NotificationScreen(navController: NavHostController) {
                 }) {
                 Text(text = "Navigate To Profile")
             }
+            id?.let {  Text(text =id, fontSize = 40.sp, fontStyle = FontStyle.Italic) }
         }
     }
 }
